@@ -1,0 +1,167 @@
+<?xml version="1.0"?>
+<sdf version="1.7">
+  <model name="my_robot">
+    <!-- Base Link -->
+    <link name="base_footprint"/>
+    <link name="base_link">
+      <visual>
+        <geometry>
+          <box>
+            <size>${base_length} ${base_width} ${base_height}</size>
+          </geometry>
+        </visual>
+        <collision>
+          <geometry>
+            <box>
+              <size>${base_length} ${base_width} ${base_height}</size>
+            </geometry>
+          </collision>
+        </collision>
+      </visual>
+    </link>
+
+    <!-- Base Joint -->
+    <joint name="base_joint" type="fixed">
+      <parent>base_footprint</parent>
+      <child>base_link</child>
+      <pose>0 0 ${wheel_radius+1} 0 0 0</pose>
+    </joint>
+
+    <!-- Wheel Links and Joints -->
+    <link name="right_wheel_link">
+      <visual>
+        <geometry>
+          <cylinder>
+            <radius>0.01</radius>
+            <length>0.2</length>
+          </geometry>
+        </visual>
+        <collision>
+          <geometry>
+            <cylinder>
+              <radius>0.01</radius>
+              <length>0.2</length>
+            </geometry>
+          </collision>
+        </collision>
+      </visual>
+    </link>
+
+    <link name="left_wheel_link">
+      <visual>
+        <geometry>
+          <cylinder>
+            <radius>0.01</radius>
+            <length>0.2</length>
+          </geometry>
+        </visual>
+        <collision>
+          <geometry>
+            <cylinder>
+              <radius>0.01</radius>
+              <length>0.2</length>
+            </geometry>
+          </collision>
+        </collision>
+      </visual>
+    </link>
+
+    <!-- Wheel Joints -->
+    <joint name="base_right_wheel_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>right_wheel_link</child>
+      <pose>-${base_length / 4.0} -${(base_width + wheel_length) / 2.0} 0 1.57 0 0</pose>
+      <axis>
+        <xyz>0 1 0</xyz>
+      </axis>
+    </joint>
+
+    <joint name="base_left_wheel_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>left_wheel_link</child>
+      <pose>-${base_length / 4.0} ${(base_width + wheel_length) / 2.0} 0 1.57 0 3.14</pose>
+      <axis>
+        <xyz>0 1 0</xyz>
+      </axis>
+    </joint>
+
+    <!-- Front Wheel Links and Joints -->
+    <link name="front_right_wheel_link">
+      <visual>
+        <geometry>
+          <cylinder>
+            <radius>0.01</radius>
+            <length>0.2</length>
+          </geometry>
+        </visual>
+        <collision>
+          <geometry>
+            <cylinder>
+              <radius>0.01</radius>
+              <length>0.2</length>
+            </geometry>
+          </collision>
+        </collision>
+      </visual>
+    </link>
+
+    <link name="front_left_wheel_link">
+      <visual>
+        <geometry>
+          <cylinder>
+            <radius>0.01</radius>
+            <length>0.2</length>
+          </geometry>
+        </visual>
+        <collision>
+          <geometry>
+            <cylinder>
+              <radius>0.01</radius>
+              <length>0.2</length>
+            </geometry>
+          </collision>
+        </collision>
+      </visual>
+    </link>
+
+    <!-- Front Wheel Joints -->
+    <joint name="base_front_right_wheel_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>front_right_wheel_link</child>
+      <pose>${base_length / 4.0} -${(base_width + wheel_length) / 2.0} 0 1.57 0 0</pose>
+      <axis>
+        <xyz>0 1 0</xyz>
+      </axis>
+    </joint>
+
+    <joint name="base_front_left_wheel_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>front_left_wheel_link</child>
+      <pose>${base_length / 4.0} ${(base_width + wheel_length) / 2.0} 0 1.57 0 3.14</pose>
+      <axis>
+        <xyz>0 1 0</xyz>
+      </axis>
+    </joint>
+
+    <!-- Gazebo specific settings -->
+    <gazebo>
+      <material>Gazebo/Blue</material>
+    </gazebo>
+
+    <!-- Diff Drive Controller Plugin -->
+    <plugin name="diff_drive_controller" filename="libgazebo_ros_diff_drive.so">
+      <update_rate>50</update_rate>
+      <left_joint>base_left_wheel_joint</left_joint>
+      <right_joint>base_right_wheel_joint</right_joint>
+      <wheel_separation>0.45</wheel_separation>
+      <wheel_diameter>0.2</wheel_diameter>
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>true</publish_odom_tf>
+      <publish_wheel_tf>true</publish_wheel_tf>
+      <odometry_topic>odom</odometry_topic>
+      <odometry_frame>odom</odometry_frame>
+      <robot_base_frame>base_footprint</robot_base_frame>
+    </plugin>
+
+  </model>
+</sdf>
